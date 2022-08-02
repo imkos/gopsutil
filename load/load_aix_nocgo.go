@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/shirou/gopsutil/v3/internal/common"
+	"github.com/imkos/gopsutil/internal/common"
 )
 
 var separator = regexp.MustCompile(`,?\s+`)
@@ -26,7 +26,7 @@ func AvgWithContext(ctx context.Context) (*AvgStat, error) {
 	}
 	ret := &AvgStat{}
 
-	p := separator.Split(string(line[idx:len(line)]), 5)
+	p := separator.Split(string(line[idx:]), 5)
 	if 4 < len(p) && p[0] == "load" && p[1] == "average:" {
 		if t, err := strconv.ParseFloat(p[2], 64); err == nil {
 			ret.Load1 = t
@@ -53,13 +53,13 @@ func MiscWithContext(ctx context.Context) (*MiscStat, error) {
 	for _, line := range strings.Split(string(out), "\n") {
 		ret.ProcsTotal++
 		switch line {
-			case "R":
-			case "A":
-				ret.ProcsRunning++
-			case "T":
-				ret.ProcsBlocked++
-			default:
-				continue
+		case "R":
+		case "A":
+			ret.ProcsRunning++
+		case "T":
+			ret.ProcsBlocked++
+		default:
+			continue
 		}
 	}
 	return ret, nil

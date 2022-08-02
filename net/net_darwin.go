@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/shirou/gopsutil/v3/internal/common"
+	"github.com/imkos/gopsutil/internal/common"
 )
 
 var (

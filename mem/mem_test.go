@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/shirou/gopsutil/v3/internal/common"
+	"github.com/imkos/gopsutil/internal/common"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/shirou/gopsutil/v3/internal/common"
+	"github.com/imkos/gopsutil/internal/common"
 )
 
 var invoke common.Invoker = common.Invoke{}
@@ -22,11 +22,21 @@ type UsageStat struct {
 	InodesUsedPercent float64 `json:"inodesUsedPercent"`
 }
 
+const (
+	// 2: DRIVE_REMOVABLE 3: DRIVE_FIXED 4: DRIVE_REMOTE 5: DRIVE_CDROM
+	PT_UNKNOWN         = 0
+	PT_DRIVE_REMOVABLE = 2
+	PT_DRIVE_FIXED     = 3
+	PT_DRIVE_REMOTE    = 4
+	PT_DRIVE_CDROM     = 5
+)
+
 type PartitionStat struct {
-	Device     string   `json:"device"`
-	Mountpoint string   `json:"mountpoint"`
-	Fstype     string   `json:"fstype"`
-	Opts       []string `json:"opts"`
+	Device        string   `json:"device"`
+	Mountpoint    string   `json:"mountpoint"`
+	PartitionType int      `json:"partitionType"`
+	Fstype        string   `json:"fstype"`
+	Opts          []string `json:"opts"`
 }
 
 type IOCountersStat struct {
