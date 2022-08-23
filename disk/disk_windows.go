@@ -94,7 +94,9 @@ func PartitionsWithContext(ctx context.Context, all bool) ([]PartitionStat, erro
 			typepath, _ := windows.UTF16PtrFromString(path)
 			typeret, _, _ := procGetDriveType.Call(uintptr(unsafe.Pointer(typepath)))
 			if typeret == 0 {
-				return ret, windows.GetLastError()
+				// return ret, windows.GetLastError()
+				fmt.Println("procGetDriveType err,", path, windows.GetLastError())
+				continue
 			}
 			// 2: DRIVE_REMOVABLE 3: DRIVE_FIXED 4: DRIVE_REMOTE 5: DRIVE_CDROM
 
@@ -115,10 +117,13 @@ func PartitionsWithContext(ctx context.Context, all bool) ([]PartitionStat, erro
 					uintptr(unsafe.Pointer(&lpFileSystemNameBuffer[0])),
 					uintptr(len(lpFileSystemNameBuffer)))
 				if driveret == 0 {
-					if typeret == 5 || typeret == 2 {
+					if typeret == 5 || typeret == 2 || typeret == 4 {
 						continue // device is not ready will happen if there is no disk in the drive
 					}
-					return ret, err
+					// Ignore some disk exceptions
+					fmt.Println("procGetVolumeInformation err,", path, err)
+					continue
+					// return ret, err
 				}
 				opts := []string{"rw"}
 				if lpFileSystemFlags&fileReadOnlyVolume != 0 {
